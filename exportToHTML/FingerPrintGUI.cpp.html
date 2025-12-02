@@ -1,0 +1,88 @@
+<html>
+<head>
+<title>FingerPrintGUI.cpp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #b3ae60;}
+.s1 { color: #bcbec4;}
+.s2 { color: #6aab73;}
+.s3 { color: #bcbec4;}
+.s4 { color: #cf8e6d;}
+.s5 { color: #2aacb8;}
+.s6 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+FingerPrintGUI.cpp</font>
+</center></td></tr></table>
+<pre><span class="s0">#include </span><span class="s2">&quot;FingerPrintGUI.h&quot;</span>
+
+<span class="s1">ATOM FingerPrintGUI::RegisterWindowClass</span><span class="s3">(</span><span class="s1">HINSTANCE hInstance</span><span class="s3">) {</span>
+    <span class="s1">WNDCLASSEX wc </span><span class="s3">= {};</span>
+    <span class="s1">wc</span><span class="s3">.</span><span class="s1">cbSize </span><span class="s3">= </span><span class="s4">sizeof</span><span class="s3">(</span><span class="s1">WNDCLASSEX</span><span class="s3">);</span>
+    <span class="s1">wc</span><span class="s3">.</span><span class="s1">style </span><span class="s3">= </span><span class="s1">CS_HREDRAW </span><span class="s3">| </span><span class="s1">CS_VREDRAW</span><span class="s3">;</span>
+    <span class="s1">wc</span><span class="s3">.</span><span class="s1">lpfnWndProc </span><span class="s3">= </span><span class="s1">FingerPrintGUI::WindowProc</span><span class="s3">;</span>
+    <span class="s1">wc</span><span class="s3">.</span><span class="s1">hInstance </span><span class="s3">= </span><span class="s1">hInstance</span><span class="s3">;</span>
+    <span class="s1">wc</span><span class="s3">.</span><span class="s1">hCursor </span><span class="s3">= </span><span class="s1">LoadCursor</span><span class="s3">(</span><span class="s4">nullptr</span><span class="s3">, </span><span class="s1">IDC_ARROW</span><span class="s3">);</span>
+    <span class="s1">wc</span><span class="s3">.</span><span class="s1">hbrBackground </span><span class="s3">= (</span><span class="s1">HBRUSH</span><span class="s3">)(</span><span class="s1">COLOR_WINDOW </span><span class="s3">+ </span><span class="s5">1</span><span class="s3">);</span>
+    <span class="s1">wc</span><span class="s3">.</span><span class="s1">lpszClassName </span><span class="s3">= </span><span class="s1">_T</span><span class="s3">(</span><span class="s2">&quot;FingerPrintWindowClass&quot;</span><span class="s3">);</span>
+
+    <span class="s4">return </span><span class="s1">RegisterClassEx</span><span class="s3">(&amp;</span><span class="s1">wc</span><span class="s3">);</span>
+<span class="s3">}</span>
+
+<span class="s1">HWND FingerPrintGUI::CreateMainWindow</span><span class="s3">(</span><span class="s1">HINSTANCE hInstance</span><span class="s3">, </span><span class="s4">int </span><span class="s1">nCmdShow</span><span class="s3">) {</span>
+    <span class="s1">HWND hwnd </span><span class="s3">= </span><span class="s1">CreateWindowEx</span><span class="s3">(</span>
+        <span class="s5">0</span><span class="s3">,</span>
+        <span class="s1">_T</span><span class="s3">(</span><span class="s2">&quot;FingerPrintWindowClass&quot;</span><span class="s3">),</span>
+        <span class="s1">_T</span><span class="s3">(</span><span class="s2">&quot;Fingerprint GUI&quot;</span><span class="s3">),</span>
+        <span class="s1">WS_OVERLAPPEDWINDOW</span><span class="s3">,</span>
+        <span class="s1">CW_USEDEFAULT</span><span class="s3">, </span><span class="s1">CW_USEDEFAULT</span><span class="s3">, </span><span class="s5">500</span><span class="s3">, </span><span class="s5">400</span><span class="s3">,</span>
+        <span class="s4">nullptr</span><span class="s3">,</span>
+        <span class="s4">nullptr</span><span class="s3">,</span>
+        <span class="s1">hInstance</span><span class="s3">,</span>
+        <span class="s4">nullptr</span>
+    <span class="s3">);</span>
+
+    <span class="s4">if </span><span class="s3">(!</span><span class="s1">hwnd</span><span class="s3">)</span>
+        <span class="s1">MessageBox</span><span class="s3">(</span><span class="s4">nullptr</span><span class="s3">, </span><span class="s1">_T</span><span class="s3">(</span><span class="s2">&quot;CreateWindowEx failed.&quot;</span><span class="s3">), </span><span class="s1">_T</span><span class="s3">(</span><span class="s2">&quot;Error&quot;</span><span class="s3">), </span><span class="s1">MB_OK </span><span class="s3">| </span><span class="s1">MB_ICONERROR</span><span class="s3">);</span>
+
+    <span class="s1">ShowWindow</span><span class="s3">(</span><span class="s1">hwnd</span><span class="s3">, </span><span class="s1">nCmdShow</span><span class="s3">);</span>
+    <span class="s1">UpdateWindow</span><span class="s3">(</span><span class="s1">hwnd</span><span class="s3">);</span>
+
+    <span class="s6">// Add button</span>
+    <span class="s1">CreateWindow</span><span class="s3">(</span>
+        <span class="s1">_T</span><span class="s3">(</span><span class="s2">&quot;BUTTON&quot;</span><span class="s3">),</span>
+        <span class="s1">_T</span><span class="s3">(</span><span class="s2">&quot;Scan Fingerprint&quot;</span><span class="s3">),</span>
+        <span class="s1">WS_CHILD </span><span class="s3">| </span><span class="s1">WS_VISIBLE </span><span class="s3">| </span><span class="s1">BS_DEFPUSHBUTTON</span><span class="s3">,</span>
+        <span class="s5">50</span><span class="s3">, </span><span class="s5">50</span><span class="s3">, </span><span class="s5">150</span><span class="s3">, </span><span class="s5">40</span><span class="s3">,</span>
+        <span class="s1">hwnd</span><span class="s3">,</span>
+        <span class="s3">(</span><span class="s1">HMENU</span><span class="s3">)</span><span class="s5">1</span><span class="s3">,</span>
+        <span class="s1">hInstance</span><span class="s3">,</span>
+        <span class="s4">nullptr</span>
+    <span class="s3">);</span>
+
+    <span class="s4">return </span><span class="s1">hwnd</span><span class="s3">;</span>
+<span class="s3">}</span>
+
+<span class="s1">LRESULT CALLBACK FingerPrintGUI::WindowProc</span><span class="s3">(</span><span class="s1">HWND hwnd</span><span class="s3">, </span><span class="s1">UINT uMsg</span><span class="s3">, </span><span class="s1">WPARAM wParam</span><span class="s3">, </span><span class="s1">LPARAM lParam</span><span class="s3">) {</span>
+    <span class="s4">switch </span><span class="s3">(</span><span class="s1">uMsg</span><span class="s3">) {</span>
+
+        <span class="s4">case </span><span class="s1">WM_COMMAND:</span>
+            <span class="s4">if </span><span class="s3">(</span><span class="s1">LOWORD</span><span class="s3">(</span><span class="s1">wParam</span><span class="s3">) == </span><span class="s5">1</span><span class="s3">) {</span>
+                <span class="s1">MessageBox</span><span class="s3">(</span><span class="s1">hwnd</span><span class="s3">, </span><span class="s1">_T</span><span class="s3">(</span><span class="s2">&quot;Fingerprint scanned!&quot;</span><span class="s3">), </span><span class="s1">_T</span><span class="s3">(</span><span class="s2">&quot;Scan&quot;</span><span class="s3">), </span><span class="s1">MB_OK</span><span class="s3">);</span>
+            <span class="s3">}</span>
+            <span class="s4">break</span><span class="s3">;</span>
+
+        <span class="s4">case </span><span class="s1">WM_DESTROY:</span>
+            <span class="s1">PostQuitMessage</span><span class="s3">(</span><span class="s5">0</span><span class="s3">);</span>
+            <span class="s4">return </span><span class="s5">0</span><span class="s3">;</span>
+    <span class="s3">}</span>
+
+    <span class="s4">return </span><span class="s1">DefWindowProc</span><span class="s3">(</span><span class="s1">hwnd</span><span class="s3">, </span><span class="s1">uMsg</span><span class="s3">, </span><span class="s1">wParam</span><span class="s3">, </span><span class="s1">lParam</span><span class="s3">);</span>
+<span class="s3">}</span>
+</pre>
+</body>
+</html>
